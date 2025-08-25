@@ -103,9 +103,7 @@ const Navbar = ({ isAuthenticated, onLogout }) => {
                 <span className="notification-badge">3</span>
               </button>
               {isAuthenticated ? (
-                <button className="logout-btn" >
-                  Logout
-                </button>
+                <LogoutButton onClick={onLogout}></LogoutButton> 
               ) : (
                 <LoginSignupToggle />
                 
