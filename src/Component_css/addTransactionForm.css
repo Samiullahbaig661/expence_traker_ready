@@ -13,14 +13,14 @@
 .header {
   text-align: center;
   margin-bottom: 30px;
-  transform: translateY(-50px);
-  opacity: 0;
+  transform: translateY(0);
+  opacity: 1;
   transition: all 1s ease-out;
 }
 
-.header.visible {
-  transform: translateY(0);
-  opacity: 1;
+.header.hidden {
+  transform: translateY(-50px);
+  opacity: 0;
 }
 
 .title {
@@ -30,8 +30,8 @@
   margin-bottom: 10px;
   background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
   background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .subtitle {
@@ -46,27 +46,27 @@
   padding: 40px;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  transform: translateY(50px) scale(0.9);
-  opacity: 0;
+  transform: translateY(0) scale(1);
+  opacity: 1;
   transition: all 1.2s ease-out;
 }
 
-.form-container.visible {
-  transform: translateY(0) scale(1);
-  opacity: 1;
+.form-container.hidden {
+  transform: translateY(50px) scale(0.9);
+  opacity: 0;
 }
 
 .toggle-container {
   display: flex;
   margin-bottom: 30px;
-  transform: translateX(-50px);
-  opacity: 0;
+  transform: translateX(0);
+  opacity: 1;
   transition: all 0.8s ease-out 0.2s;
 }
 
-.toggle-container.visible {
-  transform: translateX(0);
-  opacity: 1;
+.toggle-container.hidden {
+  transform: translateX(-50px);
+  opacity: 0;
 }
 
 .toggle-button {
@@ -77,21 +77,16 @@
   font-size: 1rem;
   cursor: pointer;
   transition: all 0.3s ease;
-  background: rgba(255, 255, 255, 0.2);
   color: white;
-  border-radius: 0;
 }
 
-.toggle-button.active.expense {
-  background: #e74c3c;
+.toggle-button.expense {
+  background: rgba(255, 255, 255, 0.2);
   border-radius: 15px 0 0 15px;
-  transform: scale(1.05);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
-.toggle-button.active.income {
-  background: #27ae60;
-  border-radius: 0 15px 15px 0;
+.toggle-button.expense.active {
+  background: #e74c3c;
   transform: scale(1.05);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
@@ -100,34 +95,51 @@
   background: rgba(255, 255, 255, 0.3);
 }
 
+.toggle-button.expense.active:hover {
+  background: #c0392b;
+}
+
+.toggle-button.income {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 0 15px 15px 0;
+}
+
+.toggle-button.income.active {
+  background: #27ae60;
+  transform: scale(1.05);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
 .toggle-button.income:hover:not(.active) {
   background: rgba(255, 255, 255, 0.3);
 }
 
-.toggle-button.active.expense:hover {
-  background: #c0392b;
-}
-
-.toggle-button.active.income:hover {
+.toggle-button.income.active:hover {
   background: #229954;
 }
 
 .input-group {
   margin-bottom: 25px;
   margin-right: 55px;
-  opacity: 0;
-  transition: all 0.8s ease-out;
-}
-
-.input-group-1 { transition-delay: 0.3s; }
-.input-group-2 { transition-delay: 0.4s; transform: translateX(50px); }
-.input-group-3 { transition-delay: 0.5s; }
-.input-group-4 { transition-delay: 0.6s; transform: translateX(50px); }
-.input-group-5 { transition-delay: 0.7s; }
-
-.input-group.visible {
   transform: translateX(0);
   opacity: 1;
+}
+
+.input-group:nth-child(1) { transition: all 0.8s ease-out 0.3s; }
+.input-group:nth-child(2) { transition: all 0.8s ease-out 0.4s; }
+.input-group:nth-child(3) { transition: all 0.8s ease-out 0.5s; }
+.input-group:nth-child(4) { transition: all 0.8s ease-out 0.6s; }
+.input-group:nth-child(5) { transition: all 0.8s ease-out 0.7s; }
+
+.input-group.hidden {
+  transform: translateX(50px);
+  opacity: 0;
+}
+
+.input-group:nth-child(1).hidden,
+.input-group:nth-child(3).hidden,
+.input-group:nth-child(5).hidden {
+  transform: translateX(-50px);
 }
 
 .label {
@@ -161,19 +173,11 @@
   box-shadow: 0 0 10px rgba(78, 205, 196, 0.3);
 }
 
-.search-input {
+.category-input {
   padding-left: 45px;
 }
 
-.search-input:focus {
-  padding-left: 50px;
-}
-
-.category-container {
-  position: relative;
-}
-
-.search-container {
+.category-input-container {
   position: relative;
 }
 
@@ -221,12 +225,12 @@
   color: rgba(255, 255, 255, 0.8);
 }
 
-.category-highlight {
+.selected-text {
   color: #4ecdc4;
   font-weight: 500;
 }
 
-.custom-category-btn {
+.custom-category-button {
   background: none;
   border: none;
   color: #4ecdc4;
@@ -234,7 +238,7 @@
   font-weight: 500;
 }
 
-.custom-category-btn:hover {
+.custom-category-button:hover {
   color: #45b7aa;
 }
 
@@ -285,12 +289,12 @@
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
-.submit-button:hover:not(.disabled) {
+.submit-button:hover:not(:disabled) {
   transform: scale(1.05);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
 }
 
-.submit-button.disabled {
+.submit-button:disabled {
   background: #666;
   cursor: not-allowed;
   opacity: 0.5;
@@ -304,21 +308,14 @@
   padding: 25px;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  transform: translateY(50px);
-  opacity: 0;
+  transform: translateY(0);
+  opacity: 1;
   transition: all 1s ease-out 0.8s;
 }
 
-.transactions-container.visible {
-  transform: translateY(0);
-  opacity: 1;
-}
-
-.transactions-title {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: white;
-  margin-bottom: 20px;
+.transactions-container.hidden {
+  transform: translateY(50px);
+  opacity: 0;
 }
 
 .transaction-item {
@@ -335,31 +332,63 @@
   color: white;
 }
 
-.transaction-category {
-  font-weight: 500;
-  margin-bottom: 5px;
-}
-
-.transaction-description {
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 0.9rem;
-}
-
 .transaction-right {
   text-align: right;
 }
 
-.transaction-amount.income {
+.amount-income {
   font-weight: bold;
   color: #2ecc71;
 }
 
-.transaction-amount.expense {
+.amount-expense {
   font-weight: bold;
   color: #e74c3c;
 }
 
-.transaction-date {
-  color: rgba(255, 255, 255, 0.7);
+.toast-notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 15px 25px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+.toast-notification.success {
+  border-left: 5px solid #27ae60;
+}
+
+.toast-notification.error {
+  border-left: 5px solid #e74c3c;
+}
+
+.toast-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.toast-icon {
+  font-size: 1.2rem;
+}
+
+.toast-text {
+  color: #333;
+}
+
+.toast-title {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.toast-message {
   font-size: 0.9rem;
+  color: rgba(0, 0, 0, 0.7);
 }

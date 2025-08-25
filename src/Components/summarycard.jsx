@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { collection, onSnapshot } from 'firebase/firestore';
-import { db } from '../firebase.js';
+import React, { useMemo, useState } from 'react';
+import { DollarSign, TrendingUp, TrendingDown, Wallet } from 'lucide-react';
 import '../Component_css/FinanceSummary.css';
 
 const SummaryCard = ({ title, amount, type, icon, count }) => {
@@ -50,7 +49,7 @@ const SummaryCard = ({ title, amount, type, icon, count }) => {
       <div className={classes.iconContainer}>{icon}</div>
       <div className="title">{title}</div>
       <div className={classes.amount}>
-        {type === 'balance' && amount >= 0 ? '+' : ''}{Math.abs(amount).toLocaleString()}/-
+        {type === 'balance' && amount >= 0 ? '+' : ''}{Math.abs(amount || 0).toLocaleString()}/-
       </div>
       {count !== undefined && <div className="count">{count} transactions</div>}
       <div className={classes.badge}>
@@ -60,85 +59,70 @@ const SummaryCard = ({ title, amount, type, icon, count }) => {
   );
 };
 
-const FinanceSummary = () => {
-  const [financialData, setFinancialData] = useState({
-    totalExpense: 0,
-    totalIncome: 0,
-    expenseCount: 0,
-    incomeCount: 0,
-  });
+const FinanceSummary = ({ transactions }) => {
+  const financialData = useMemo(() => {
+    const data = {
+      totalExpense: 0,
+      totalIncome: 0,
+      expenseCount: 0,
+      incomeCount: 0,
+    };
 
-  // Fetch transactions from Firebase
-  useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, 'transactions'), (snapshot) => {
-      const transactions = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-
-      // Calculate totals
-      let totalExpense = 0;
-      let totalIncome = 0;
-      let expenseCount = 0;
-      let incomeCount = 0;
-
+    if (transactions && Array.isArray(transactions) && transactions.length > 0) {
       transactions.forEach((item) => {
-        if (item.type === 'expense') {
-          totalExpense += item.amount;
-          expenseCount++;
-        } else if (item.type === 'income') {
-          totalIncome += item.amount;
-          incomeCount++;
+        if (item.type === 'expense' && typeof item.amount === 'number') {
+          data.totalExpense += item.amount;
+          data.expenseCount++;
+        } else if (item.type === 'income' && typeof item.amount === 'number') {
+          data.totalIncome += item.amount;
+          data.incomeCount++;
         }
       });
+    }
 
-      setFinancialData({
-        totalExpense,
-        totalIncome,
-        expenseCount,
-        incomeCount,
-      });
-    }, (error) => {
-      console.error('Error fetching transactions: ', error);
-    });
-
-    return () => unsubscribe();
-  }, []);
+    return data;
+  }, [transactions]);
 
   const totalBalance = financialData.totalIncome - financialData.totalExpense;
 
-  const expenseIcon = '💸';
-  const incomeIcon = '💰';
-  const balanceIcon = totalBalance >= 0 ? '📈' : '📉';
+  const expenseIcon = <Wallet size={24} />;
+  const incomeIcon = <DollarSign size={24} />;
+  const balanceIcon = totalBalance >= 0 ? <TrendingUp size={24} /> : <TrendingDown size={24} />;
 
   return (
     <div className="container">
       <div className="header">
         <h1 className="main-title">Financial Overview</h1>
-        <p className="subtitle">Data calculated from Firebase transactions</p>
+        <p className="subtitle">Data calculated from your transactions</p>
       </div>
       <div className="cards-container">
-        <SummaryCard
-          title="Total Expenses"
-          amount={financialData.totalExpense}
-          type="expense"
-          icon={expenseIcon}
-          count={financialData.expenseCount}
-        />
-        <SummaryCard
-          title="Total Income"
-          amount={financialData.totalIncome}
-          type="income"
-          icon={incomeIcon}
-          count={financialData.incomeCount}
-        />
-        <SummaryCard
-          title="Net Balance"
-          amount={totalBalance}
-          type="balance"
-          icon={balanceIcon}
-          count={financialData.expenseCount + financialData.incomeCount}
-        />
+        {transactions && Array.isArray(transactions) && transactions.length > 0 ? (
+          <>
+            <SummaryCard
+              title="Total Expenses"
+              amount={financialData.totalExpense}
+              type="expense"
+              icon={expenseIcon}
+              count={financialData.expenseCount}
+            />
+            <SummaryCard
+              title="Total Income"
+              amount={financialData.totalIncome}
+              type="income"
+              icon={incomeIcon}
+              count={financialData.incomeCount}
+            />
+            <SummaryCard
+              title="Net Balance"
+              amount={totalBalance}
+              type="balance"
+              icon={balanceIcon}
+              count={financialData.expenseCount + financialData.incomeCount}
+            />
+          </>
+        ) : (
+          <p className="no-data">No transactions found. Add some transactions to see your financial overview.</p>
+        )}
       </div>
     </div>
   );

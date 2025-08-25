@@ -50,7 +50,7 @@
 }
 
 .navbar-container {
-  max-width: 1200px;
+  max-width: 1300px;
   margin: 0 auto;
   padding: 0 20px;
   position: relative;
@@ -98,6 +98,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  margin-right: 30px;
 }
 
 .hidden {

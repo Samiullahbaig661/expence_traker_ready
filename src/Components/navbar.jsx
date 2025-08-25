@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Home, DollarSign, PieChart, Settings, Menu, X, User, Bell } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import '../Component_css/navbar.css';
+import LoginSignupToggle from '../button/login/signupbutt';
 
-const Navbar = () => {
+const Navbar = ({ isAuthenticated, onLogout }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -23,7 +24,6 @@ const Navbar = () => {
 
   return (
     <nav className="navbar">
-      {/* Floating background shapes */}
       <div className="background-overlay">
         <div className="floating-shape shape1"></div>
         <div className="floating-shape shape2"></div>
@@ -32,7 +32,6 @@ const Navbar = () => {
 
       <div className="navbar-container">
         <div className="navbar-content">
-          {/* Logo */}
           <div className="logo-container">
             <div className="logo-icon">
               <DollarSign size={24} color="#8b5cf6" />
@@ -40,7 +39,6 @@ const Navbar = () => {
             <span className="logo-text">ExpenseTracker</span>
           </div>
 
-          {/* Desktop Menu */}
           {!isMobile && (
             <div className="desktop-menu">
               {navItems.map((item) => (
@@ -52,7 +50,6 @@ const Navbar = () => {
             </div>
           )}
 
-          {/* User Actions */}
           {!isMobile && (
             <div className="user-actions">
               <button className="notification-btn">
@@ -62,10 +59,16 @@ const Navbar = () => {
               <div className="user-avatar">
                 <User size={20} color="white" />
               </div>
+              {isAuthenticated ? (
+                <button className="logout-btn" onClick={onLogout}>
+                  Logout
+                </button>
+              ) : (
+                <LoginSignupToggle />
+              )}
             </div>
           )}
 
-          {/* Mobile Menu Button */}
           {isMobile && (
             <button
               className="menu-button"
@@ -76,7 +79,6 @@ const Navbar = () => {
           )}
         </div>
 
-        {/* Mobile Menu */}
         {isMobile && (
           <div className={`mobile-menu ${isMenuOpen ? 'open' : ''}`}>
             {navItems.map((item) => (
@@ -102,6 +104,13 @@ const Navbar = () => {
                 <Bell size={24} />
                 <span className="notification-badge">3</span>
               </button>
+              {isAuthenticated ? (
+                <button className="logout-btn" onClick={onLogout}>
+                  Logout
+                </button>
+              ) : (
+                <LoginSignupToggle />
+              )}
             </div>
           </div>
         )}
