@@ -8,6 +8,7 @@ import SignUpForm from './Components/signup_page';
 import LoginPage from './Components/Signin_page';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import app from './firebase';
+import DollarLoader from './Components/DollarLoader';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(null); // null = loading
@@ -22,12 +23,11 @@ function App() {
   }, [auth]);
 
   if (isAuthenticated === null) {
-    return <div>Loading...</div>;
+    return <DollarLoader/>; // Loading state
   }
 
   return (
     <>
-    
       <Navbar
         isAuthenticated={isAuthenticated}
         onLogout={() => auth.signOut().then(() => navigate('/signin', { replace: true }))}

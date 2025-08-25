@@ -3,6 +3,7 @@ import { Home, DollarSign, PieChart, Settings, Menu, X, User, Bell } from 'lucid
 import { Link } from 'react-router-dom';
 import '../Component_css/navbar.css';
 import LoginSignupToggle from '../button/login/signupbutt';
+import LogoutButton from '../button/logout';
 
 const Navbar = ({ isAuthenticated, onLogout }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -59,10 +60,7 @@ const Navbar = ({ isAuthenticated, onLogout }) => {
               <div className="user-avatar">
                 <User size={20} color="white" />
               </div>
-              {isAuthenticated ? (
-                <button className="logout-btn" onClick={onLogout}>
-                  Logout
-                </button>
+              {isAuthenticated ? (<LogoutButton onClick={onLogout}></LogoutButton> 
               ) : (
                 <LoginSignupToggle />
               )}
@@ -105,11 +103,12 @@ const Navbar = ({ isAuthenticated, onLogout }) => {
                 <span className="notification-badge">3</span>
               </button>
               {isAuthenticated ? (
-                <button className="logout-btn" onClick={onLogout}>
+                <button className="logout-btn" >
                   Logout
                 </button>
               ) : (
                 <LoginSignupToggle />
+                
               )}
             </div>
           </div>
